@@ -2,21 +2,20 @@ package utils
 
 import (
 	"context"
-	"fmt"
-
-	"github.com/jackc/pgx/v5"
+	"koda-b8-db5/database"
 )
 
-func UpdateContact(conn *pgx.Conn, first string, last string, email string, phone string) {
-	res, err := conn.Query(context.Background(), `
-		UPDATE "contacts" SET "email" 
-	`, first, last, email, phone)
+func CreateContact(data database.Contact) bool {
+	conn, _ := Conn()
+	_, err := conn.Query(context.Background(), `
+		INSERT INTO "contacts" ("First_name", "Last_name", "Email", "Phone") VALUES
+		($1, $2, $3, $4)
+	`, data.First_name, data.Last_name, data.Email, data.Phone)
 
 	if err != nil {
-		fmt.Println("Gagal membuat contact")
+		return false
 	} else {
-		fmt.Println("Create contact Succes")
+		return true
 	}
 
-	defer res.Close()
 }
