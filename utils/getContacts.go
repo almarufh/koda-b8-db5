@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 	"koda-b8-db5/database"
+	"sync"
 
 	"github.com/jackc/pgx/v5"
 )
 
-func GetContacts(conn *pgx.Conn) {
+func GetContacts(conn *pgx.Conn, wg *sync.WaitGroup, signal *chan string) {
 	rows, err := conn.Query(context.Background(), `
 		SELECT * FROM "contacts";
 	`)
@@ -26,4 +27,6 @@ func GetContacts(conn *pgx.Conn) {
 	}
 	newContacts := database.Contacts()
 	*newContacts = contacts
+	*signal <- "success"
+	defer wg.Done()
 }
