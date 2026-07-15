@@ -4,15 +4,14 @@ import (
 	"fmt"
 	"koda-b8-db5/database"
 	"sync"
-
-	"github.com/jackc/pgx/v5"
 )
 
-func ListCOntacts(conn *pgx.Conn) {
+func ListContacts() {
+	Clear()
 	wg := sync.WaitGroup{}
 	signal := make(chan string)
 	wg.Add(1)
-	go GetContacts(conn, &wg, &signal)
+	go GetContacts(&wg, &signal)
 
 	i := ""
 	for i != "success" {
@@ -26,8 +25,7 @@ func ListCOntacts(conn *pgx.Conn) {
 	contacts := database.Contacts()
 
 	if len(*contacts) < 1 {
-		fmt.Printf("Contacts empty\n\nPress enter to back! ")
-		fmt.Scanf("\n")
+		fmt.Printf("Contacts empty\n")
 		return
 	}
 
@@ -41,7 +39,4 @@ func ListCOntacts(conn *pgx.Conn) {
 		fmt.Printf("   Phone : %s\n", res.Phone)
 		fmt.Printf("   -----------------------\n\n")
 	}
-
-	fmt.Printf("\n\nPress enter to back!  ")
-	fmt.Scanf("\n")
 }
