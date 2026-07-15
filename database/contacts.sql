@@ -8,12 +8,12 @@ CREATE TABLE "contacts" (
     "UpdatedAt" TIMESTAMP DEFAULT NOW()
 );
 
-INSERT INTO "contacts" ("First_name", "Last_name", "Email", "Phone") VALUES
-('Almaruf', 'Hidayat', 'almarufhidayat99@gmail.com', '082393468568');
+-- INSERT INTO "contacts" ("First_name", "Last_name", "Email", "Phone") VALUES
+-- ('Almaruf', 'Hidayat', 'almarufhidayat99@gmail.com', '082393468568');
 
-SELECT * FROM "contacts";
-UPDATE "contacts" SET "Email" = 'raflis@mail.com' WHERE "Id" = 2;
+-- SELECT * FROM "contacts";
+-- UPDATE "contacts" SET "Email" = 'raflis@mail.com' WHERE "Id" = 2;
 
-DELETE FROM "contacts" WHERE "Id" = 4;
+-- DELETE FROM "contacts" WHERE "Id" = 4;
 
-DROP TABLE contacts;
+-- DROP TABLE contacts;
