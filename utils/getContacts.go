@@ -9,7 +9,9 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func GetContacts(conn *pgx.Conn, wg *sync.WaitGroup, signal *chan string) {
+func GetContacts(wg *sync.WaitGroup, signal *chan string) {
+	conn, _ := Conn()
+	defer conn.Close(context.Background())
 	rows, err := conn.Query(context.Background(), `
 		SELECT * FROM "contacts";
 	`)
@@ -17,8 +19,6 @@ func GetContacts(conn *pgx.Conn, wg *sync.WaitGroup, signal *chan string) {
 	if err != nil {
 		fmt.Println("Gagal memuat table")
 	}
-
-	defer rows.Close()
 
 	contacts, err := pgx.CollectRows(rows, pgx.RowToStructByName[database.Contact])
 
