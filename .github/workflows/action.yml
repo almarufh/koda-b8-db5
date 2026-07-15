@@ -10,22 +10,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get source code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.4'
+
       - name: Build images
         run: docker build -t ghcr.io/${{github.actor}}/contact-management-latest .
+
       - name: Login to ghcr.io
         run: echo -n ${{secrets.GITHUB_TOKEN}} | docker login ghcr.io --username ${{github.actor}} --password-stdin
+
       - name: Push images to ghcr
         run: docker push ghcr.io/${{github.actor}}/contact-management-latest
+
       - name: Install dependencies
         run: go mod tidy
+
       - name: Build program
         run: go build -o program main.go
+
       - name: Compress files images
         run: zip -r ./contact-management-${{ github.ref_name }}.zip ./program
+
       - name: Release to Github
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             contact-management-${{ github.ref_name }}.zip
- 
